@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobil uyumluluk ve touch optimizasyonları */
+/* ═══════════════════════════════════════════════════════════════
+   ÇETIN KONAK — Ultra-Luxury Dark & Gold Design System
+   ═══════════════════════════════════════════════════════════════ */
+
 @layer base {
   * {
     -webkit-tap-highlight-color: transparent;
@@ -14,42 +17,39 @@
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* iOS Safari için smooth scroll */
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 
   body {
-    /* iOS Safari için momentum scroll */
     -webkit-overflow-scrolling: touch;
-    /* Touch action optimizasyonu */
     touch-action: manipulation;
-    /* Samsung/Android için font rendering */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background: #0a0a0a;
+    color: #e5e7eb;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
-  /* Touch-friendly butonlar */
   button, a {
     min-height: 44px;
     min-width: 44px;
-    /* iOS Safari için touch delay kaldırma */
     touch-action: manipulation;
   }
 
-  /* Input alanları için iOS Safari optimizasyonu */
   input, textarea, select {
-    font-size: 16px; /* iOS Safari zoom engelleme */
+    font-size: 16px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     border-radius: 8px;
   }
 
-  /* iOS Safari için input focus zoom engelleme */
   @media screen and (max-width: 768px) {
     input[type="text"],
     input[type="email"],
     input[type="tel"],
+    input[type="number"],
     input[type="date"],
     input[type="time"],
     textarea,
@@ -58,16 +58,30 @@
     }
   }
 
-  /* Safe area için padding (iPhone X ve üzeri) */
   @supports (padding: max(0px)) {
     body {
       padding-left: env(safe-area-inset-left);
       padding-right: env(safe-area-inset-right);
     }
   }
+
+  /* Scrollbar: Luxury thin gold bar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #D4AF37, #B8860B);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #F3E5AB;
+  }
 }
 
-/* Mobil için özel utility class'lar */
+/* ─── Utility Classes ──────────────────────────────────────────── */
 @layer utilities {
   .touch-manipulation {
     touch-action: manipulation;
@@ -76,20 +90,41 @@
   .safe-area-top {
     padding-top: env(safe-area-inset-top);
   }
-
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-
   .safe-area-left {
     padding-left: env(safe-area-inset-left);
   }
-
   .safe-area-right {
     padding-right: env(safe-area-inset-right);
   }
 
-  /* Golden Shimmer Effect - Harflerin içinden geçen */
+  /* ─── Glassmorphism Card ─────────────────────────────────────── */
+  .glass-card {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+  }
+
+  .glass-card-hover {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 175, 55, 0.05);
+    transform: translateY(-4px);
+  }
+
+  /* ─── Golden Text Shimmer (Preserved from original) ──────────── */
   .golden-text-shimmer {
     background: linear-gradient(
       90deg,
@@ -127,31 +162,115 @@
   }
 
   @keyframes shimmer-text {
-    0% {
-      background-position: 300% center;
-    }
-    50% {
-      background-position: 0% center;
-    }
-    100% {
-      background-position: -300% center;
-    }
+    0% { background-position: 300% center; }
+    50% { background-position: 0% center; }
+    100% { background-position: -300% center; }
   }
 
-  /* Fallback for browsers that don't support background-clip */
+  /* ─── Gold Glow Effect ───────────────────────────────────────── */
+  .gold-glow {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.15),
+                0 0 60px rgba(212, 175, 55, 0.05);
+  }
+  .gold-glow-hover:hover {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.25),
+                0 0 80px rgba(212, 175, 55, 0.1);
+  }
+
+  /* ─── Gold Gradient Text ─────────────────────────────────────── */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #D4AF37, #F3E5AB, #D4AF37);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ─── Luxury Divider ─────────────────────────────────────────── */
+  .luxury-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  }
+
+  /* ─── Fallback for browsers without background-clip ──────────── */
   @supports not (-webkit-background-clip: text) {
     .golden-text-shimmer {
       color: #ffffff;
-      text-shadow: 
+      text-shadow:
         0 0 10px rgba(212, 175, 55, 0.6),
         0 0 20px rgba(212, 175, 55, 0.4),
         0 0 30px rgba(212, 175, 55, 0.2);
     }
     .golden-text-shimmer-delayed {
       color: rgba(229, 231, 235, 0.95);
-      text-shadow: 
+      text-shadow:
         0 0 8px rgba(212, 175, 55, 0.5),
         0 0 15px rgba(212, 175, 55, 0.3);
     }
+  }
+
+  /* ─── Custom Form Inputs (Dark luxury) ───────────────────────── */
+  .luxury-input {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transition: all 0.3s ease;
+  }
+  .luxury-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .luxury-input:focus {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #D4AF37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    outline: none;
+  }
+
+  /* ─── Luxury Animated RGB Gold Glow ────────────────────────── */
+  .luxury-rgb-glow {
+    font-family: 'Cinzel', Georgia, serif;
+    background: linear-gradient(
+      90deg,
+      #D4AF37 0%,
+      #F3E5AB 25%,
+      #B8860B 50%,
+      #F3E5AB 75%,
+      #D4AF37 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: luxury-gold-cycle 6s linear infinite;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.35));
+  }
+
+  @keyframes luxury-gold-cycle {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* ─── True RGB Glow (Colorful) ────────────────────────────────── */
+  .true-rgb-glow {
+    font-family: 'Cinzel', Georgia, serif;
+    background: linear-gradient(
+      90deg,
+      #b066ff 0%,
+      #ff66cc 20%,
+      #66ccff 40%,
+      #b066ff 60%,
+      #ff66cc 80%,
+      #b066ff 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: true-rgb-cycle 8s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(176, 102, 255, 0.4));
+  }
+
+  @keyframes true-rgb-cycle {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
   }
 }

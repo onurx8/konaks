@@ -1,6 +1,6 @@
-//onurx
-import { useState } from 'react';
-import { X } from 'lucide-react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import salonic1Image from '../components/fotos/saloniç/saloniç1.jpg';
 import salonsahneImage from '../components/fotos/saloniç/salonsahne.jpg';
 import salonikigirisImage from '../components/fotos/saloniç/salonikigiris.jpg';
@@ -17,7 +17,7 @@ interface GalleryImage {
 
 function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const categories = [
     { id: 'all' as Category, label: 'Tümü' },
@@ -46,87 +46,208 @@ function Gallery() {
     { id: 12, url: 'https://images.pexels.com/photos/2306277/pexels-photo-2306277.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'food', alt: 'Aperatif İkramlar' },
   ];
 
-  const filteredImages = selectedCategory === 'all'
-    ? images
-    : images.filter(img => img.category === selectedCategory);
+  const filteredImages = useMemo(() => {
+    if (selectedCategory === 'all') return images;
+    return images.filter(img => img.category === selectedCategory);
+  }, [selectedCategory, images]);
+
+  const handleNext = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (selectedIndex !== null) {
+      setSelectedIndex((selectedIndex + 1) % filteredImages.length);
+    }
+  }, [selectedIndex, filteredImages.length]);
+
+  const handlePrev = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (selectedIndex !== null) {
+      setSelectedIndex(selectedIndex === 0 ? filteredImages.length - 1 : selectedIndex - 1);
+    }
+  }, [selectedIndex, filteredImages.length]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedIndex === null) return;
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'Escape') setSelectedIndex(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIndex, handleNext, handlePrev]);
+
+  useEffect(() => {
+    // Prevent scrolling when lightbox is open
+    if (selectedIndex !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [selectedIndex]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="relative h-[300px] bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=1920)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.3
-          }}
-        ></div>
+    <div className="min-h-screen bg-transparent">
+      {/* Hero Banner */}
+      <div className="relative h-[250px] sm:h-[300px] flex items-center justify-center mt-20 overflow-hidden border-b border-white/5">
+        
+        {/* Massive Static Text Background (Watermark) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-15 select-none">
+          <span className="text-[45px] sm:text-[80px] md:text-[130px] lg:text-[200px] xl:text-[280px] font-black text-transparent bg-clip-text bg-gradient-to-b from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] tracking-tighter whitespace-nowrap drop-shadow-[0_0_30px_rgba(212,175,55,0.4)]">
+            ÇETİN KONAK
+          </span>
+        </div>
+
+        {/* Foreground Content */}
         <div className="relative z-10 text-center px-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">Galeri</h1>
-          <div className="w-20 sm:w-24 h-1 bg-[#D4AF37] mx-auto mb-3 sm:mb-4"></div>
-          <p className="text-gray-200 text-base sm:text-lg px-2">Çetin Konak Düğün Salonu'nun Görselleri</p>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#F3E5AB] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wide mb-3 sm:mb-4"
+          >
+            Galeri
+          </motion.h1>
+          <div className="luxury-divider w-20 sm:w-24 mx-auto mb-3 sm:mb-4" />
+          <p className="text-gray-300 text-base sm:text-lg px-2 drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
+            Çetin Konak Düğün Salonu'nun En Özel Kareleri
+          </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 md:py-16">
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 sm:mb-10 md:mb-12">
+      {/* Category Filters */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-10 sm:mb-16">
           {categories.map((category) => (
-            <button
+            <motion.button
               key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold transition-all transform active:scale-95 hover:scale-105 touch-manipulation min-h-[44px] ${
+              onClick={() => {
+                setSelectedCategory(category.id);
+                setSelectedIndex(null);
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-sm sm:text-base font-semibold transition-all shadow-lg touch-manipulation ${
                 selectedCategory === category.id
-                  ? 'bg-[#D4AF37] text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100 shadow-md'
+                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white shadow-[#D4AF37]/30 border border-transparent'
+                  : 'glass-card text-gray-300 hover:text-white hover:border-[#D4AF37]/50 hover:bg-white/5'
               }`}
             >
               {category.label}
-            </button>
+            </motion.button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-          {filteredImages.map((image) => (
-            <div
-              key={image.id}
-              className="relative group cursor-pointer overflow-hidden rounded-xl shadow-lg hover:shadow-2xl active:shadow-xl transition-all duration-300 transform active:scale-[0.98] hover:-translate-y-2 touch-manipulation"
-              onClick={() => setSelectedImage(image.url)}
-            >
-              <img
-                src={image.url}
-                alt={image.alt}
-                className="w-full h-56 sm:h-64 md:h-72 object-cover group-hover:scale-110 transition-transform duration-1000"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex items-end">
-                <p className="text-white font-semibold text-sm sm:text-base p-3 sm:p-4">{image.alt}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Premium Grid Gallery */}
+        <motion.div 
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+        >
+          <AnimatePresence>
+            {filteredImages.map((image, index) => (
+              <motion.div
+                key={image.id}
+                layout
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.4 }}
+                className="group relative cursor-pointer overflow-hidden rounded-2xl aspect-[4/3] bg-black/40 border border-white/10 hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all duration-500"
+                onClick={() => setSelectedIndex(index)}
+              >
+                {/* Image */}
+                <img
+                  src={image.url}
+                  alt={image.alt}
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out opacity-80 group-hover:opacity-100"
+                  loading="lazy"
+                />
+                
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-end pb-6 sm:pb-8">
+                  <ZoomIn className="text-[#D4AF37] h-8 w-8 sm:h-10 sm:w-10 mb-3 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500" />
+                  <p className="text-white font-bold text-sm sm:text-base tracking-wide transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
+                    {image.alt}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-3 sm:p-4 safe-area-top safe-area-bottom"
-          onClick={() => setSelectedImage(null)}
-        >
-          <button
-            className="absolute top-3 sm:top-4 right-3 sm:right-4 text-white hover:text-[#D4AF37] active:text-[#B8860B] transition-colors touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center z-10"
-            onClick={() => setSelectedImage(null)}
-            aria-label="Kapat"
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-6"
+            onClick={() => setSelectedIndex(null)}
           >
-            <X className="h-7 w-7 sm:h-8 sm:w-8" />
-          </button>
-          <img
-            src={selectedImage}
-            alt="Büyütülmüş görsel"
-            className="max-w-full max-h-full object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
+            {/* Close Button */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8, rotate: -90 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, scale: 0.8, rotate: 90 }}
+              transition={{ duration: 0.3 }}
+              className="absolute top-4 sm:top-8 right-4 sm:right-8 bg-black/50 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full p-2 sm:p-3 transition-all duration-300 z-50 touch-manipulation"
+              onClick={(e) => { e.stopPropagation(); setSelectedIndex(null); }}
+              aria-label="Kapat"
+            >
+              <X className="h-6 w-6 sm:h-8 sm:w-8" />
+            </motion.button>
+
+            {/* Navigation Buttons */}
+            {filteredImages.length > 1 && (
+              <>
+                <motion.button
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full p-2 sm:p-4 transition-all duration-300 z-50 touch-manipulation"
+                  onClick={handlePrev}
+                  aria-label="Önceki"
+                >
+                  <ChevronLeft className="h-6 w-6 sm:h-8 sm:w-8" />
+                </motion.button>
+
+                <motion.button
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full p-2 sm:p-4 transition-all duration-300 z-50 touch-manipulation"
+                  onClick={handleNext}
+                  aria-label="Sonraki"
+                >
+                  <ChevronRight className="h-6 w-6 sm:h-8 sm:w-8" />
+                </motion.button>
+              </>
+            )}
+
+            {/* Full Size Image */}
+            <motion.div
+              key={selectedIndex}
+              initial={{ scale: 0.8, opacity: 0, x: 50 }}
+              animate={{ scale: 1, opacity: 1, x: 0 }}
+              exit={{ scale: 0.8, opacity: 0, x: -50 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative max-w-5xl max-h-[85vh] w-full flex justify-center items-center px-12 sm:px-24"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={filteredImages[selectedIndex].url}
+                alt={filteredImages[selectedIndex].alt}
+                className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,1)] border border-white/10"
+              />
+              <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
+                <span className="bg-black/70 text-white px-4 py-2 rounded-full text-sm backdrop-blur-md border border-white/10">
+                  {filteredImages[selectedIndex].alt} ({selectedIndex + 1} / {filteredImages.length})
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

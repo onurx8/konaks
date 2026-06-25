@@ -1,5 +1,5 @@
 //onurx
-import { useState } from 'react';
+import { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Features from './components/Features';
@@ -10,13 +10,36 @@ import VenueDetails from './pages/VenueDetails';
 import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
 import Reservation from './pages/Reservation';
+import CinematicTour from './pages/CinematicTour';
 import Footer from './components/Footer';
 import FloatingButtons from './components/FloatingButtons';
+import Preloader from './components/Preloader';
 
-type Page = 'home' | 'about' | 'venue' | 'gallery' | 'contact' | 'reservation';
+// Lazy-load the heavy 3D scene so the initial paint is fast
+const Scene3D = lazy(() => import('./components/Scene3D'));
+
+type Page = 'home' | 'about' | 'venue' | 'gallery' | 'contact' | 'reservation' | 'tour';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Track scroll progress for the 3D scene
+  const handleScroll = useCallback(() => {
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollHeight <= 0) {
+      setScrollProgress(0);
+      return;
+    }
+    const progress = Math.max(0, Math.min(1, window.scrollY / scrollHeight));
+    setScrollProgress(progress);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -30,27 +53,41 @@ function App() {
         return <Contact onNavigate={setCurrentPage} />;
       case 'reservation':
         return <Reservation />;
+      case 'tour':
+        return <CinematicTour onNavigate={setCurrentPage} />;
       default:
         return (
           <>
             <Hero 
               onReservation={() => setCurrentPage('reservation')} 
               onGallery={() => setCurrentPage('gallery')}
+              onTour={() => setCurrentPage('tour')}
             />
             <Features />
             <GalleryPreview onViewAll={() => setCurrentPage('gallery')} />
-            <AboutPreview onReadMore={() => setCurrentPage('about')} />
+            {/* 3D yazının ve simgenin net görünmesi için boşluk (eski Hakkımızda alanının yeri) */}
+            <div className="h-[85vh] md:h-[70vh] w-full pointer-events-none" />
           </>
         );
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header currentPage={currentPage} onNavigate={setCurrentPage} />
-      {renderPage()}
-      <Footer onNavigate={setCurrentPage} />
-      <FloatingButtons />
+    <div className="min-h-screen bg-transparent relative">
+      <Preloader />
+      
+      {/* Global 3D Background Canvas */}
+      <Suspense fallback={null}>
+        <Scene3D scrollProgress={scrollProgress} currentPage={currentPage} />
+      </Suspense>
+
+      {/* Content Layer — sits above the 3D scene */}
+      <div className="relative z-10">
+        <Header currentPage={currentPage} onNavigate={setCurrentPage} />
+        {renderPage()}
+        <Footer onNavigate={setCurrentPage} />
+        <FloatingButtons />
+      </div>
     </div>
   );
 }

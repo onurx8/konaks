@@ -47,29 +47,30 @@ function VenueDetails() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="relative h-[300px] bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=1920)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.3
-          }}
-        ></div>
+    <div className="bg-transparent min-h-screen">
+      <div className="relative h-[250px] sm:h-[300px] flex items-center justify-center mt-20 overflow-hidden border-b border-white/5">
+        {/* Massive Static Text Background (Watermark) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-15 select-none">
+          <span className="text-[45px] sm:text-[80px] md:text-[130px] lg:text-[200px] xl:text-[280px] font-black text-transparent bg-clip-text bg-gradient-to-b from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] tracking-tighter whitespace-nowrap drop-shadow-[0_0_30px_rgba(212,175,55,0.4)]">
+            ÇETİN KONAK
+          </span>
+        </div>
+
+        {/* Foreground Content */}
         <div className="relative z-10 text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Salon Detayları</h1>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto"></div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#F3E5AB] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wide mb-3 sm:mb-4">
+            Salon Detayları
+          </h1>
+          <div className="luxury-divider w-20 sm:w-24 mx-auto mb-3 sm:mb-4"></div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Hizmetlerimiz ve Özelliklerimiz
           </h2>
-          <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+          <p className="text-gray-400 text-lg max-w-3xl mx-auto">
             Çetin Konak Düğün Salonu olarak, en özel gününüzü unutulmaz kılmak için eksiksiz hizmet sunuyoruz.
           </p>
         </div>
@@ -80,7 +81,7 @@ function VenueDetails() {
             return (
               <div
                 key={index}
-                className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl shadow-black/50 hover:border-[#D4AF37]/50 transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
@@ -89,8 +90,8 @@ function VenueDetails() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-3">{feature.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                    <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
+                    <p className="text-gray-400 leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               </div>
@@ -99,12 +100,12 @@ function VenueDetails() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-8">Konum</h2>
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <h2 className="text-3xl font-bold text-white mb-8">Konum</h2>
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
             <div className="relative w-full h-[500px] md:h-[600px]">
               <iframe
                 src="https://www.google.com/maps?ll=40.217714,28.372879&z=16&t=m&hl=tr&gl=TR&mapclient=embed&cid=1816434013871570210&output=embed"
-                className="absolute top-0 left-0 w-full h-full rounded-xl"
+                className="absolute top-0 left-0 w-full h-full rounded-2xl"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
@@ -115,7 +116,7 @@ function VenueDetails() {
           </div>
           <button
             onClick={() => window.open('https://www.google.com/maps?ll=40.217714,28.372879&z=16&t=m&hl=tr&gl=TR&mapclient=embed&cid=1816434013871570210', '_blank')}
-            className="w-full mt-4 bg-[#D4AF37] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#B8860B] transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
+            className="w-full mt-4 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-[#D4AF37]/20 transition-all shadow-2xl shadow-black/50 flex items-center justify-center space-x-2"
           >
             <MapPin className="h-5 w-5" />
             <span>Google Haritalar'da Aç</span>
