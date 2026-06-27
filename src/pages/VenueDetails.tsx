@@ -65,33 +65,33 @@ function VenueDetails() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 md:py-16">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
             Hizmetlerimiz ve Özelliklerimiz
           </h2>
-          <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+          <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-3xl mx-auto">
             Çetin Konak Düğün Salonu olarak, en özel gününüzü unutulmaz kılmak için eksiksiz hizmet sunuyoruz.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
               <div
                 key={index}
-                className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl shadow-black/50 hover:border-[#D4AF37]/50 transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-black/40 backdrop-blur-xl border border-white/10 p-4 sm:p-6 md:p-8 rounded-2xl shadow-2xl shadow-black/50 hover:border-[#D4AF37]/50 transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
-                    <div className="bg-gradient-to-br from-[#D4AF37] to-[#B8860B] p-4 rounded-lg">
-                      <Icon className="h-8 w-8 text-white" />
+                    <div className="bg-gradient-to-br from-[#D4AF37] to-[#B8860B] p-3 sm:p-4 rounded-lg">
+                      <Icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
-                    <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                    <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">{feature.title}</h3>
+                    <p className="text-gray-400 text-sm sm:text-base leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               </div>
@@ -100,9 +100,9 @@ function VenueDetails() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-bold text-white mb-8">Konum</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 md:mb-8">Konum</h2>
           <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
-            <div className="relative w-full h-[500px] md:h-[600px]">
+            <div className="relative w-full h-[280px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
               <iframe
                 src="https://www.google.com/maps?ll=40.217714,28.372879&z=16&t=m&hl=tr&gl=TR&mapclient=embed&cid=1816434013871570210&output=embed"
                 className="absolute top-0 left-0 w-full h-full rounded-2xl"
@@ -116,7 +116,7 @@ function VenueDetails() {
           </div>
           <button
             onClick={() => window.open('https://www.google.com/maps?ll=40.217714,28.372879&z=16&t=m&hl=tr&gl=TR&mapclient=embed&cid=1816434013871570210', '_blank')}
-            className="w-full mt-4 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-[#D4AF37]/20 transition-all shadow-2xl shadow-black/50 flex items-center justify-center space-x-2"
+            className="w-full mt-3 sm:mt-4 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg hover:shadow-[#D4AF37]/20 transition-all shadow-2xl shadow-black/50 flex items-center justify-center space-x-2 touch-manipulation min-h-[48px]"
           >
             <MapPin className="h-5 w-5" />
             <span>Google Haritalar'da Aç</span>

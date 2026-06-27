@@ -1,5 +1,6 @@
 //onurx
 import { useEffect, useRef, useState } from 'react';
+import { X } from 'lucide-react';
 
 interface CinematicTourProps {
   onNavigate: (page: 'home' | 'about' | 'venue' | 'gallery' | 'contact' | 'reservation') => void;
@@ -11,6 +12,7 @@ function CinematicTour({ onNavigate }: CinematicTourProps) {
   // States
   const [loadedCount, setLoadedCount] = useState(0);
   const [isImagesLoaded, setIsImagesLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Images cache
   const imagesRef = useRef<HTMLImageElement[]>([]);
@@ -19,6 +21,14 @@ function CinematicTour({ onNavigate }: CinematicTourProps) {
   // Animation values (Refs to prevent re-renders on scroll loop)
   const targetFrameRef = useRef(0);
   const interpolatedFrameRef = useRef(0);
+
+  // Detect mobile
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Preload all 277 images
   useEffect(() => {
@@ -133,6 +143,11 @@ function CinematicTour({ onNavigate }: CinematicTourProps) {
     };
   }, [isImagesLoaded]);
 
+  const handleSkip = () => {
+    onNavigate('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Preloader UI Screen (Minimal, clean, dark)
   if (!isImagesLoaded) {
     const percent = Math.round((loadedCount / TOTAL_FRAMES) * 100);
@@ -152,7 +167,7 @@ function CinematicTour({ onNavigate }: CinematicTourProps) {
 
           <div className="text-center space-y-1">
             <h2 className="text-sm tracking-widest uppercase text-white font-bold">Sinematik Tur Yükleniyor</h2>
-            <p className="text-[10px] text-neutral-500 font-sans">Kareler hazırlanıyor...</p>
+            <p className="text-xs text-neutral-500 font-sans">Kareler hazırlanıyor...</p>
           </div>
         </div>
       </div>
@@ -160,7 +175,7 @@ function CinematicTour({ onNavigate }: CinematicTourProps) {
   }
 
   return (
-    <div className="relative min-h-[550vh] bg-[#0a0a0a]">
+    <div className={`relative bg-[#0a0a0a] ${isMobile ? 'min-h-[350vh]' : 'min-h-[550vh]'}`}>
       {/* FIXED CANVAS FOR 3D IMAGE SEQUENCE */}
       <div className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-neutral-950 pointer-events-none">
         <canvas
@@ -170,6 +185,16 @@ function CinematicTour({ onNavigate }: CinematicTourProps) {
         {/* Soft color-grading dark overlays for premium aesthetic */}
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-neutral-950/40 pointer-events-none" />
       </div>
+
+      {/* Skip / Exit Button */}
+      <button
+        onClick={handleSkip}
+        className="fixed top-20 sm:top-24 right-3 sm:right-6 z-50 bg-black/60 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full px-3 sm:px-4 py-2 sm:py-2.5 transition-all duration-300 touch-manipulation min-h-[44px] flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-md"
+        aria-label="Turu Atla"
+      >
+        <X className="h-4 w-4 sm:h-5 sm:w-5" />
+        <span className="text-xs sm:text-sm font-medium">Turu Atla</span>
+      </button>
     </div>
   );
 }

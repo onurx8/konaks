@@ -112,7 +112,7 @@ function Hero({ onReservation, onGallery, onTour }: HeroProps) {
         </motion.div>
 
         {/* Main Heading with premium animations */}
-        <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold mb-4 sm:mb-7 leading-tight px-2">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold mb-4 sm:mb-7 leading-tight px-2">
           <motion.span
             initial={{ opacity: 0, y: 35, filter: 'blur(6px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -193,7 +193,7 @@ function Hero({ onReservation, onGallery, onTour }: HeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
-          className="mt-16 sm:mt-20 flex flex-col items-center text-gray-600"
+          className="mt-8 sm:mt-16 md:mt-20 flex flex-col items-center text-gray-600"
         >
           <span className="text-xs tracking-widest uppercase mb-3">Keşfetmeye Başla</span>
           <motion.div

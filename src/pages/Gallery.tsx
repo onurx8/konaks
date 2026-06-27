@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import salonic1Image from '../components/fotos/saloniç/saloniç1.jpg';
@@ -18,6 +18,9 @@ interface GalleryImage {
 function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  // Touch/swipe state for lightbox
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const categories = [
     { id: 'all' as Category, label: 'Tümü' },
@@ -64,6 +67,29 @@ function Gallery() {
       setSelectedIndex(selectedIndex === 0 ? filteredImages.length - 1 : selectedIndex - 1);
     }
   }, [selectedIndex, filteredImages.length]);
+
+  // Swipe handlers for lightbox
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartRef.current.x;
+    const deltaY = e.changedTouches[0].clientY - touchStartRef.current.y;
+    // Only trigger if horizontal swipe is dominant and > 50px
+    if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    touchStartRef.current = null;
+  }, [handleNext, handlePrev]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -127,7 +153,7 @@ function Gallery() {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-sm sm:text-base font-semibold transition-all shadow-lg touch-manipulation ${
+              className={`px-4 sm:px-8 py-2 sm:py-3.5 rounded-full text-sm sm:text-base font-semibold transition-all shadow-lg touch-manipulation min-h-[44px] ${
                 selectedCategory === category.id
                   ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white shadow-[#D4AF37]/30 border border-transparent'
                   : 'glass-card text-gray-300 hover:text-white hover:border-[#D4AF37]/50 hover:bg-white/5'
@@ -141,7 +167,7 @@ function Gallery() {
         {/* Premium Grid Gallery */}
         <motion.div 
           layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8"
         >
           <AnimatePresence>
             {filteredImages.map((image, index) => (
@@ -163,10 +189,10 @@ function Gallery() {
                   loading="lazy"
                 />
                 
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-end pb-6 sm:pb-8">
-                  <ZoomIn className="text-[#D4AF37] h-8 w-8 sm:h-10 sm:w-10 mb-3 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500" />
-                  <p className="text-white font-bold text-sm sm:text-base tracking-wide transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
+                {/* Overlay on hover & active (touch) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-end pb-6 sm:pb-8">
+                  <ZoomIn className="text-[#D4AF37] h-8 w-8 sm:h-10 sm:w-10 mb-3 transform translate-y-4 group-hover:translate-y-0 group-active:translate-y-0 transition-all duration-500" />
+                  <p className="text-white font-bold text-sm sm:text-base tracking-wide transform translate-y-4 group-hover:translate-y-0 group-active:translate-y-0 transition-all duration-500 delay-75">
                     {image.alt}
                   </p>
                 </div>
@@ -185,6 +211,8 @@ function Gallery() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-6"
             onClick={() => setSelectedIndex(null)}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             {/* Close Button */}
             <motion.button
@@ -205,21 +233,21 @@ function Gallery() {
                 <motion.button
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full p-2 sm:p-4 transition-all duration-300 z-50 touch-manipulation"
+                  className="absolute left-1 sm:left-8 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full p-1.5 sm:p-4 transition-all duration-300 z-50 touch-manipulation"
                   onClick={handlePrev}
                   aria-label="Önceki"
                 >
-                  <ChevronLeft className="h-6 w-6 sm:h-8 sm:w-8" />
+                  <ChevronLeft className="h-5 w-5 sm:h-8 sm:w-8" />
                 </motion.button>
 
                 <motion.button
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full p-2 sm:p-4 transition-all duration-300 z-50 touch-manipulation"
+                  className="absolute right-1 sm:right-8 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-[#D4AF37] text-gray-300 hover:text-white border border-white/20 hover:border-[#D4AF37] rounded-full p-1.5 sm:p-4 transition-all duration-300 z-50 touch-manipulation"
                   onClick={handleNext}
                   aria-label="Sonraki"
                 >
-                  <ChevronRight className="h-6 w-6 sm:h-8 sm:w-8" />
+                  <ChevronRight className="h-5 w-5 sm:h-8 sm:w-8" />
                 </motion.button>
               </>
             )}
@@ -231,7 +259,7 @@ function Gallery() {
               animate={{ scale: 1, opacity: 1, x: 0 }}
               exit={{ scale: 0.8, opacity: 0, x: -50 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-5xl max-h-[85vh] w-full flex justify-center items-center px-12 sm:px-24"
+              className="relative max-w-5xl max-h-[85vh] w-full flex justify-center items-center px-2 sm:px-8 md:px-16 lg:px-24"
               onClick={(e) => e.stopPropagation()}
             >
               <img
@@ -240,11 +268,16 @@ function Gallery() {
                 className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,1)] border border-white/10"
               />
               <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
-                <span className="bg-black/70 text-white px-4 py-2 rounded-full text-sm backdrop-blur-md border border-white/10">
+                <span className="bg-black/70 text-white px-4 py-2 rounded-full text-xs sm:text-sm backdrop-blur-md border border-white/10">
                   {filteredImages[selectedIndex].alt} ({selectedIndex + 1} / {filteredImages.length})
                 </span>
               </div>
             </motion.div>
+
+            {/* Swipe hint on mobile */}
+            <div className="absolute bottom-6 left-0 right-0 text-center pointer-events-none sm:hidden">
+              <span className="text-gray-500 text-xs">← Kaydırarak gezin →</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

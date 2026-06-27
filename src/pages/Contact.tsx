@@ -124,7 +124,7 @@ function Contact({ onNavigate }: ContactProps) {
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Konum</h2>
             <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
-              <div className="relative w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px]">
+              <div className="relative w-full h-[280px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
                 <iframe
                   src="https://www.google.com/maps?ll=40.217714,28.372879&z=16&t=m&hl=tr&gl=TR&mapclient=embed&cid=1816434013871570210&output=embed"
                   className="absolute top-0 left-0 w-full h-full rounded-xl"

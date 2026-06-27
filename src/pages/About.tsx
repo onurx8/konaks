@@ -27,7 +27,7 @@ function About() {
 
   return (
     <div className="bg-transparent min-h-screen">
-      <div className="relative h-[250px] sm:h-[300px] flex items-center justify-center mt-20 overflow-hidden border-b border-white/5">
+      <div className="relative h-[250px] sm:h-[300px] flex items-center justify-center mt-16 overflow-hidden border-b border-white/5">
         {/* Massive Static Text Background (Watermark) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-15 select-none">
           <span className="text-[45px] sm:text-[80px] md:text-[130px] lg:text-[200px] xl:text-[280px] font-black text-transparent bg-clip-text bg-gradient-to-b from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] tracking-tighter whitespace-nowrap drop-shadow-[0_0_30px_rgba(212,175,55,0.4)]">
@@ -44,10 +44,10 @@ function About() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 p-8 md:p-12 mb-16">
-          <h2 className="text-3xl font-bold text-white mb-6">Hikayemiz</h2>
-          <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
+      <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12 md:py-16">
+        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 p-4 sm:p-6 md:p-8 lg:p-12 mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Hikayemiz</h2>
+          <div className="space-y-4 sm:space-y-6 text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed">
             <p>
               Çetin Konak Düğün Salonu, 2022 yılında Çetin ailesi tarafından Bursa ili Karacabey ilçesi Esentepe mahallesi 224 Sk. No:14 konumunda kurulmuştur. Kurulduğumuz günden bu yana kaliteli hizmet ve müşteri memnuniyeti ilkesiyle hareket ederek, binlerce çiftin en özel gününe ev sahipliği yaptık.
             </p>
@@ -60,11 +60,11 @@ function About() {
           </div>
         </div>
 
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-white mb-4 text-center">Salon Özelliklerimiz</h2>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-12"></div>
+        <div className="mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 text-center">Salon Özelliklerimiz</h2>
+          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-6 sm:mb-8 md:mb-12"></div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
             <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-2xl shadow-black/50 hover:border-[#D4AF37]/50 transition-all duration-300">
               <div className="flex items-start space-x-4">
                 <div className="bg-gradient-to-br from-[#D4AF37] to-[#B8860B] p-3 rounded-lg flex-shrink-0">
@@ -151,19 +151,19 @@ function About() {
           </div>
         </div>
 
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-white mb-4 text-center">Vizyonumuz ve Misyonumuz</h2>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-12"></div>
+        <div className="mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 text-center">Vizyonumuz ve Misyonumuz</h2>
+          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-6 sm:mb-8 md:mb-12"></div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-black/40 backdrop-blur-xl border border-[#D4AF37]/30 rounded-2xl p-8 shadow-2xl shadow-black/50 bg-gradient-to-br from-[#D4AF37]/20 to-[#B8860B]/10">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+            <div className="bg-black/40 backdrop-blur-xl border border-[#D4AF37]/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl shadow-black/50 bg-gradient-to-br from-[#D4AF37]/20 to-[#B8860B]/10">
               <h3 className="text-2xl font-bold mb-4 text-[#D4AF37]">Vizyonumuz</h3>
               <p className="leading-relaxed text-gray-300">
                 Bölgenin en çok tercih edilen, kaliteli hizmet ve mükemmel müşteri deneyimi sunan öncü düğün salonu olmak. Sürekli gelişim ve yeniliklerle, her çiftin hayallerini en üst düzeyde gerçekleştirmek.
               </p>
             </div>
 
-            <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl shadow-black/50 hover:border-[#D4AF37]/50 transition-all duration-300">
+            <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl shadow-black/50 hover:border-[#D4AF37]/50 transition-all duration-300">
               <h3 className="text-2xl font-bold mb-4 text-white">Misyonumuz</h3>
               <p className="leading-relaxed text-gray-400">
                 En özel gününüzü unutulmaz kılmak için her detayı titizlikle planlamak, profesyonel hizmet ve samimi yaklaşımla müşterilerimizin beklentilerini aşmak ve güvenilir bir partner olmak.
@@ -173,10 +173,10 @@ function About() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-bold text-white mb-4 text-center">Değerlerimiz</h2>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-12"></div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 text-center">Değerlerimiz</h2>
+          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-6 sm:mb-8 md:mb-12"></div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {values.map((value, index) => {
               const Icon = value.icon;
               return (

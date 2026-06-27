@@ -194,7 +194,7 @@ En kısa sürede geri dönüşünüzü rica ederim.`;
                     max="900"
                     value={formData.guestCount}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-base bg-white/5 border border-white/10 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all touch-manipulation"
                     placeholder="Misafir sayısı (50-900)"
                   />
                 </div>

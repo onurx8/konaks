@@ -66,7 +66,7 @@ function App() {
             <Features />
             <GalleryPreview onViewAll={() => setCurrentPage('gallery')} />
             {/* 3D yazının ve simgenin net görünmesi için boşluk (eski Hakkımızda alanının yeri) */}
-            <div className="h-[85vh] md:h-[70vh] w-full pointer-events-none" />
+            <div className="h-[55vh] sm:h-[70vh] md:h-[70vh] w-full pointer-events-none" />
           </>
         );
     }

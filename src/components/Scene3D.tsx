@@ -548,13 +548,22 @@ function SceneContent({ scrollProgress, currentPage }: Scene3DProps) {
 
 // ─── Main Export ─────────────────────────────────────────────────
 function Scene3D({ scrollProgress, currentPage }: Scene3DProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   return (
     <div className="fixed inset-0 z-0 pointer-events-none" style={{ background: '#0a0a0a' }}>
       <Canvas
         camera={{ fov: 60, near: 0.1, far: 200, position: [0, 0, 12] }}
-        dpr={[1, 1.5]}
+        dpr={isMobile ? [1, 1.2] : [1, 1.5]}
         gl={{
-          antialias: true,
+          antialias: !isMobile,
           alpha: false,
           powerPreference: 'high-performance',
           toneMapping: THREE.ACESFilmicToneMapping,

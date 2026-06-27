@@ -1,6 +1,6 @@
 //onurx
 import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 
@@ -28,6 +28,25 @@ function Header({ currentPage, onNavigate }: HeaderProps) {
     setIsMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Close menu when clicking outside / pressing escape
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') setIsMenuOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen, handleEscape]);
 
   return (
     <header className="bg-black/60 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50 safe-area-top">
@@ -80,44 +99,57 @@ function Header({ currentPage, onNavigate }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu with Backdrop Overlay */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="md:hidden bg-black/80 backdrop-blur-xl border-t border-white/5 safe-area-bottom overflow-hidden"
-          >
-            <nav className="px-3 py-3 space-y-2">
-              {menuItems.map((item, index) => (
+          <>
+            {/* Backdrop overlay — tap to close */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 top-16 bg-black/50 z-40 md:hidden"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            
+            {/* Menu panel */}
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="md:hidden bg-black/90 backdrop-blur-xl border-t border-white/5 safe-area-bottom overflow-hidden relative z-50 max-h-[calc(100vh-4rem)] overflow-y-auto"
+            >
+              <nav className="px-3 py-3 space-y-2">
+                {menuItems.map((item, index) => (
+                  <motion.button
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`block w-full text-left px-4 py-3 rounded-lg transition-all text-base font-medium min-h-[48px] touch-manipulation ${
+                      currentPage === item.id
+                        ? 'bg-[#D4AF37] text-white'
+                        : 'text-gray-400 hover:bg-white/5 active:bg-white/10'
+                    }`}
+                  >
+                    {item.label}
+                  </motion.button>
+                ))}
                 <motion.button
-                  key={item.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`block w-full text-left px-4 py-3 rounded-lg transition-all text-base font-medium min-h-[48px] touch-manipulation ${
-                    currentPage === item.id
-                      ? 'bg-[#D4AF37] text-white'
-                      : 'text-gray-400 hover:bg-white/5 active:bg-white/10'
-                  }`}
+                  transition={{ delay: menuItems.length * 0.05 }}
+                  onClick={() => handleNavClick('reservation')}
+                  className="block w-full text-left bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white px-4 py-3 rounded-lg text-base font-medium hover:from-[#B8860B] hover:to-[#D4AF37] transition-all min-h-[48px] touch-manipulation"
                 >
-                  {item.label}
+                  Rezervasyon
                 </motion.button>
-              ))}
-              <motion.button
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: menuItems.length * 0.05 }}
-                onClick={() => handleNavClick('reservation')}
-                className="block w-full text-left bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white px-4 py-3 rounded-lg text-base font-medium hover:from-[#B8860B] hover:to-[#D4AF37] transition-all min-h-[48px] touch-manipulation"
-              >
-                Rezervasyon
-              </motion.button>
-            </nav>
-          </motion.div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

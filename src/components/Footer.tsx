@@ -100,13 +100,13 @@ function Footer({ onNavigate }: FooterProps) {
                   </a>
                 </li>
                 <li className="mt-3">
-                  <p className="text-gray-600 text-[10px] mb-1">Sosyal Medya</p>
+                <p className="text-gray-600 text-xs mb-1">Sosyal Medya</p>
                   <div className="flex items-center space-x-2">
                     <a
                       href="https://www.facebook.com/cetinkonaksalon/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-white/5 hover:bg-[#D4AF37] border border-white/10 hover:border-[#D4AF37] text-gray-500 hover:text-white p-2 rounded transition-all flex items-center justify-center touch-manipulation"
+                      className="bg-white/5 hover:bg-[#D4AF37] border border-white/10 hover:border-[#D4AF37] text-gray-500 hover:text-white p-2.5 rounded transition-all flex items-center justify-center touch-manipulation min-h-[44px] min-w-[44px]"
                       aria-label="Facebook"
                     >
                       <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -117,7 +117,7 @@ function Footer({ onNavigate }: FooterProps) {
                       href="https://www.instagram.com/cetinkonaksalon"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-white/5 hover:bg-[#D4AF37] border border-white/10 hover:border-[#D4AF37] text-gray-500 hover:text-white p-2 rounded transition-all flex items-center justify-center touch-manipulation"
+                      className="bg-white/5 hover:bg-[#D4AF37] border border-white/10 hover:border-[#D4AF37] text-gray-500 hover:text-white p-2.5 rounded transition-all flex items-center justify-center touch-manipulation min-h-[44px] min-w-[44px]"
                       aria-label="Instagram"
                     >
                       <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -136,7 +136,7 @@ function Footer({ onNavigate }: FooterProps) {
                 Pazartesi - Pazar<br />
                 09:00 - 22:00
               </p>
-              <p className="text-gray-600 text-[10px]">
+              <p className="text-gray-600 text-xs">
                 Randevu için lütfen arayınız
               </p>
             </div>
@@ -144,7 +144,7 @@ function Footer({ onNavigate }: FooterProps) {
 
           {/* Bottom Bar */}
           <div className="border-t border-white/5 mt-6 pt-6 text-center">
-            <p className="text-gray-600 text-[11px]">
+            <p className="text-gray-600 text-xs">
               © {currentYear} Çetin Konak Düğün Salonu. Tüm hakları saklıdır.
             </p>
           </div>
